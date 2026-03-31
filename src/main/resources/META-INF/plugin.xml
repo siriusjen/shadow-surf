@@ -1,0 +1,16 @@
+<idea-plugin>
+    <id>com.shadowsurf.plugin</id>
+    <name>ShadowSurf</name>
+    <vendor email="support@shadowsurf.local">ShadowSurf</vendor>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow
+                id="ShadowSurf"
+                anchor="right"
+                factoryClass="com.shadowsurf.plugin.ShadowSurfToolWindowFactory"
+                secondary="true"
+                canCloseContents="false"/>
+    </extensions>
+</idea-plugin>
