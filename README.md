@@ -1,29 +1,40 @@
 # ShadowSurf
 
-`ShadowSurf` 是一个轻量级 IntelliJ IDEA 内嵌浏览器插件。
+在 IntelliJ IDEA 里轻量打开网页，减少白底网页与暗色 IDE 之间的割裂感。
 
-它不是完整浏览器，而是一个适合在 IDEA 中快速打开网页、轻量浏览和减少白底刺眼感的 Tool Window。插件基于 `JBCefBrowser` 实现，尽量保持 UI 与 IDEA 主题一致，并通过注入 CSS / JS 做基础的网页暗色增强。
+`ShadowSurf` 是一个基于 `JBCefBrowser` 的轻量级 IDEA 内嵌浏览器插件。它不是完整浏览器，而是一个更适合日常轻浏览、临时查资料和低打扰网页访问的 Tool Window：尽量少切应用，尽量少被刺眼白底打断。
 
-## 功能概览
+## 为什么用它
 
-### 已实现的 MVP
+很多 IDEA 用户在暗色主题下工作，但打开网页时常会遇到两个问题：
 
-- Tool Window 形式集成到 IDEA
-- 地址栏输入并打开网页
-- 前进 / 后退 / 刷新
-- 最多 5 个轻量标签页
-- 跟随 IDEA 主题的插件 UI
-- 网页“暗色增强”开关
-- JCEF 不可用时的降级提示
+- 需要频繁在 IDE 和浏览器之间切换
+- 白底网页和暗色 IDE 之间反差很大，视觉上容易跳脱
 
-### 明确不做
+`ShadowSurf` 的目标不是替代浏览器，而是在 IDEA 里补上一个足够轻、足够顺手、足够克制的内嵌浏览入口。
 
-- 完整浏览器能力
-- 下载管理
-- 浏览器扩展体系
-- DevTools
-- 账号同步
-- 复杂书签系统
+## 亮点
+
+- 直接在 IDEA Tool Window 中打开网页
+- 支持地址栏、打开页面、前进 / 后退 / 刷新
+- 支持少量标签页，适合轻量浏览
+- 插件 UI 跟随 IDEA 主题
+- 提供网页“暗色增强”，尽量压暗常见白底区域
+- `JCEF` 不可用时有明确降级提示，不会直接失效
+
+## 适合谁
+
+适合：
+
+- 长时间使用 IntelliJ IDEA / JetBrains IDE 的开发者
+- 想在 IDE 里快速看文档、查链接、临时打开页面的人
+- 使用暗色主题，希望减少白底网页突兀感的人
+
+不适合：
+
+- 想把它当成完整浏览器的人
+- 需要下载管理、扩展系统、DevTools、同步能力的人
+- 追求复杂网页完美暗黑适配的人
 
 ## 当前状态
 
@@ -41,39 +52,19 @@
 
 - `build/distributions/shadow-surf-0.1.0.zip`
 
-## 运行环境
-
-### 开发环境
-
-- macOS / Linux / Windows 均可，本文示例默认 macOS / Linux Shell
-- JDK 21
-- Gradle Wrapper（仓库已自带）
-- IntelliJ IDEA Community 2024.3 兼容
-
-### 运行依赖
-
-- 目标 IDE 需要支持 `JCEF`
-- 如果当前 IDE Runtime 不支持 `JCEF`，插件不会崩溃，而是显示提示：
-  - `JCEF is not available in this IDE runtime.`
-
 ## 快速开始
 
-### 1. 获取代码
+### 本地试用
 
 ```bash
-git clone <your-repo-url>
-cd shadow-surf
+./gradlew runIde --stacktrace
 ```
 
-如果这是本地已有目录，直接进入项目根目录即可。
+启动后，在 IDEA 中打开：
 
-### 2. 运行测试
+- `View` → `Tool Windows` → `ShadowSurf`
 
-```bash
-./gradlew test --stacktrace
-```
-
-### 3. 构建插件包
+### 构建插件包
 
 ```bash
 ./gradlew buildPlugin --stacktrace
@@ -85,13 +76,35 @@ cd shadow-surf
 build/distributions/shadow-surf-0.1.0.zip
 ```
 
-### 4. 启动 IDEA 沙箱调试插件
+### 从磁盘安装
 
-```bash
-./gradlew runIde --stacktrace
-```
+1. 打开 `Settings` / `Preferences`
+2. 进入 `Plugins`
+3. 点击右上角齿轮
+4. 选择 `Install Plugin from Disk...`
+5. 选择 `build/distributions/shadow-surf-0.1.0.zip`
+6. 安装后重启 IDE
 
-这会启动一个带沙箱配置的 IntelliJ IDEA 实例，并自动加载 `ShadowSurf` 插件。
+## 它能做什么
+
+当前 MVP 已实现：
+
+- Tool Window 形式集成到 IDEA
+- 地址栏输入并打开网页
+- 前进 / 后退 / 刷新
+- 最多 5 个轻量标签页
+- 跟随 IDEA 主题的插件 UI
+- 网页“暗色增强”开关
+- `JCEF` 不可用时的降级提示
+
+明确不做：
+
+- 完整浏览器能力
+- 下载管理
+- 浏览器扩展体系
+- DevTools
+- 账号同步
+- 复杂书签系统
 
 ## 在 IDEA 中使用
 
@@ -133,8 +146,7 @@ https://example.com
 ### 标签页行为
 
 - 默认启动时会打开一个首页标签页
-- 当前默认首页是：
-  - `https://www.baidu.com`
+- 当前默认首页是：`https://www.baidu.com`
 - 最多支持 5 个标签页
 - 超过 5 个时，会弹出提示，不再继续创建
 - 关闭标签页后：
@@ -161,33 +173,20 @@ https://example.com
 - 该功能是“尽量增强”，不是对所有网站都完美适配
 - 某些站点仍可能出现局部区域过亮、样式冲突或颜色不理想
 
-## 安装方式
+## 运行环境
 
-### 方式一：从磁盘安装插件包
+### 开发环境
 
-先构建插件：
+- macOS / Linux / Windows 均可，本文示例默认 macOS / Linux Shell
+- JDK 21
+- Gradle Wrapper（仓库已自带）
+- IntelliJ IDEA Community 2024.3 兼容
 
-```bash
-./gradlew buildPlugin --stacktrace
-```
+### 运行依赖
 
-然后在 IntelliJ IDEA 中：
-
-1. 打开 `Settings` / `Preferences`
-2. 进入 `Plugins`
-3. 点击右上角齿轮
-4. 选择 `Install Plugin from Disk...`
-5. 选择：
-   - `build/distributions/shadow-surf-0.1.0.zip`
-6. 安装后重启 IDE
-
-### 方式二：开发模式直接运行
-
-```bash
-./gradlew runIde --stacktrace
-```
-
-适合本地调试，不需要手动安装 zip。
+- 目标 IDE 需要支持 `JCEF`
+- 如果当前 IDE Runtime 不支持 `JCEF`，插件不会崩溃，而是显示提示：
+  - `JCEF is not available in this IDE runtime.`
 
 ## 开发说明
 
@@ -222,19 +221,6 @@ https://example.com
 - `src/test/kotlin/com/shadowsurf/plugin/browser/BrowserTabManagerTest.kt`：标签页逻辑测试
 - `docs/plans/2026-03-31-shadowsurf-mvp.md`：MVP 计划文档
 
-## 已验证行为
-
-基于当前仓库和插件沙箱，已验证以下行为：
-
-- Tool Window 可见并可打开
-- 默认标签页可加载页面
-- 地址栏输入后可打开网页
-- 后退 / 前进 / 刷新正常工作
-- 可新建标签页
-- 可关闭标签页
-- 可切换标签页
-- 暗色增强开关可以让页面样式发生变化
-
 ## 已知限制
 
 - 仅适合轻量浏览，不适合替代完整浏览器
@@ -246,7 +232,7 @@ https://example.com
 
 ## 故障排查
 
-### 1. Tool Window 没出现
+### Tool Window 没出现
 
 先确认插件已经成功加载：
 
@@ -257,7 +243,7 @@ https://example.com
 
 - `View` → `Tool Windows` → `ShadowSurf`
 
-### 2. 页面打不开
+### 页面打不开
 
 可以按顺序检查：
 
@@ -266,7 +252,7 @@ https://example.com
 - 目标站点是否限制嵌入式浏览器环境
 - IDEA Runtime 是否支持 `JCEF`
 
-### 3. 显示 JCEF 不可用
+### 显示 JCEF 不可用
 
 如果看到：
 
@@ -276,7 +262,7 @@ JCEF is not available in this IDE runtime.
 
 说明当前 IDE 运行环境不支持 `JCEF`。这不是插件崩溃，而是插件的预期降级行为。
 
-### 4. 暗色效果不明显
+### 暗色效果不明显
 
 这是预期内的可能情况，因为当前实现是“暗色增强”而不是完整主题适配：
 
@@ -284,17 +270,6 @@ JCEF is not available in this IDE runtime.
 - 某些区域使用了强样式覆盖
 - 某些站点使用 Canvas / Shadow DOM / 动态渲染，可能无法完全覆盖
 
-## 后续维护建议
-
-如果继续迭代，建议仍然保持 MVP 边界，优先做小而稳的增强，例如：
-
-- 更稳的地址栏状态同步
-- 更好的标签标题更新体验
-- 更稳妥的暗色增强规则
-- 更友好的 JCEF 不可用提示
-
-不建议在没有明确需求前扩展到完整浏览器路线。
-
 ## License
 
-当前仓库未声明许可证。如需开源或分发，请补充明确的 License 文件。
+当前仓库包含 `LICENSE` 文件。使用或分发前，请以仓库中的许可证内容为准。
