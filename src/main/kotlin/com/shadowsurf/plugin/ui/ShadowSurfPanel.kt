@@ -135,6 +135,9 @@ class ShadowSurfPanel(private val project: Project) : JPanel(BorderLayout()), Di
         val backButton = JButton("←")
         val forwardButton = JButton("→")
         val refreshButton = JButton("⟳")
+        val noteButton = JButton(ShadowSurfUiHints.READING_NOTE_BUTTON_LABEL).apply {
+            toolTipText = ShadowSurfUiHints.readingNoteButtonTooltip()
+        }
         val openButton = JButton("Open")
         val newTabButton = JButton("+")
         val closeTabButton = JButton("×")
@@ -142,6 +145,7 @@ class ShadowSurfPanel(private val project: Project) : JPanel(BorderLayout()), Di
         backButton.addActionListener { currentBrowser()?.cefBrowser?.goBack() }
         forwardButton.addActionListener { currentBrowser()?.cefBrowser?.goForward() }
         refreshButton.addActionListener { currentBrowser()?.cefBrowser?.reload() }
+        noteButton.addActionListener { triggerReadingNoteCapture() }
         openButton.addActionListener { openAddressFieldUrl() }
         newTabButton.addActionListener { openNewTab(DEFAULT_URL) }
         closeTabButton.addActionListener { closeCurrentTab() }
@@ -158,6 +162,7 @@ class ShadowSurfPanel(private val project: Project) : JPanel(BorderLayout()), Di
 
         val actionPanel = JPanel(FlowLayout(FlowLayout.RIGHT, JBUI.scale(6), 0))
         actionPanel.add(darkToggle)
+        actionPanel.add(noteButton)
         actionPanel.add(openButton)
         panel.add(actionPanel, BorderLayout.EAST)
 
