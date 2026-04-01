@@ -20,6 +20,7 @@
 - 支持少量标签页，适合轻量浏览
 - 插件 UI 跟随 IDEA 主题
 - 提供网页“暗色增强”，尽量压暗常见白底区域
+- 支持阅读时选中内容后快速摘录到本地 Markdown
 - `JCEF` 不可用时有明确降级提示，不会直接失效
 
 ## 适合谁
@@ -47,6 +48,7 @@
 - 已验证打开页面、前进 / 后退 / 刷新可用
 - 已验证新建 / 关闭 / 切换标签页可用
 - 已验证暗色增强开关可触发页面样式变化
+- 已补充阅读摘录的设置、快捷键与本地 Markdown 写入能力
 
 打包产物位置：
 
@@ -95,6 +97,9 @@ build/distributions/shadow-surf-0.1.0.zip
 - 最多 5 个轻量标签页
 - 跟随 IDEA 主题的插件 UI
 - 网页“暗色增强”开关
+- 选中文本后用快捷键打开紧凑摘录条
+- 将摘录、标题、链接、备注、标签追加到本地 Markdown
+- 通过设置页指定笔记目录和文件名
 - `JCEF` 不可用时的降级提示
 
 明确不做：
@@ -142,6 +147,51 @@ https://example.com
 - `×`：关闭当前标签页
 - `Dark Page`：切换网页暗色增强
 - `Open`：打开地址栏中的网址
+
+### 阅读摘录
+
+1. 在网页里选中一段文本
+2. 按 `Cmd/Ctrl + Shift + M`
+3. 在底部摘录条里补充备注和标签
+4. 第一次点击 `Save` 时先选择保存文件
+5. 之后点击 `Save` 会继续写入上次选择的文件
+6. 如需换文件，点击 `Save As...`
+
+保存内容包括：
+
+- 当前时间
+- 页面标题
+- 页面 URL
+- 选中文本
+- 备注
+- 标签（可空）
+
+如果没有选中文本，插件只会给出轻提示，不会弹出大窗口。
+
+保存规则：
+
+- 第一次 `Save`：先选文件位置
+- 文件不存在：自动新建
+- 文件已存在：可选 `Append` 或 `Overwrite`
+- 后续 `Save`：直接保存到上次选定的文件
+- `Save As...`：随时重新选择目标文件
+
+### 阅读摘录设置
+
+进入：
+
+- `Settings/Preferences` → `Tools` → `ShadowSurf Reading Notes`
+
+可配置项只有 3 个：
+
+- `Notes Directory`
+- `Notes File Name`
+- `Resolved Path`
+
+默认值：
+
+- `~/Documents/ShadowSurf`
+- `reading-notes.md`
 
 ### 标签页行为
 
@@ -218,7 +268,12 @@ https://example.com
 - `src/main/kotlin/com/shadowsurf/plugin/ui/ShadowSurfPanel.kt`：主 UI、地址栏、导航、标签页、暗色开关
 - `src/main/kotlin/com/shadowsurf/plugin/browser/BrowserTabManager.kt`：轻量标签页状态管理
 - `src/main/kotlin/com/shadowsurf/plugin/browser/DarkModeInjector.kt`：暗色增强脚本注入
+- `src/main/kotlin/com/shadowsurf/plugin/browser/SelectionCaptureBridge.kt`：网页选中文本抓取桥接
+- `src/main/kotlin/com/shadowsurf/plugin/ui/ReadingNoteBar.kt`：紧凑摘录条 UI
+- `src/main/kotlin/com/shadowsurf/plugin/notes/ReadingNoteWriter.kt`：Markdown 摘录写入
+- `src/main/kotlin/com/shadowsurf/plugin/settings/ReadingNotesSettings.kt`：摘录目录与文件名设置
 - `src/test/kotlin/com/shadowsurf/plugin/browser/BrowserTabManagerTest.kt`：标签页逻辑测试
+- `src/test/kotlin/com/shadowsurf/plugin/notes/ReadingNoteWriterTest.kt`：摘录写入测试
 - `docs/plans/2026-03-31-shadowsurf-mvp.md`：MVP 计划文档
 
 ## 已知限制

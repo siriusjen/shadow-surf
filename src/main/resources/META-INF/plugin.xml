@@ -12,5 +12,10 @@
                 factoryClass="com.shadowsurf.plugin.ShadowSurfToolWindowFactory"
                 secondary="true"
                 canCloseContents="false"/>
+        <applicationConfigurable
+                id="com.shadowsurf.plugin.readingNotes"
+                parentId="tools"
+                displayName="ShadowSurf Reading Notes"
+                instance="com.shadowsurf.plugin.settings.ReadingNotesConfigurable"/>
     </extensions>
 </idea-plugin>
