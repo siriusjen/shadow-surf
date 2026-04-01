@@ -10,6 +10,7 @@ import com.shadowsurf.plugin.ui.ShadowSurfPanel
 class ShadowSurfToolWindowFactory : ToolWindowFactory {
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
+        ShadowSurfToolWindowLayout.apply(toolWindow)
         val panel = ShadowSurfPanel(project)
         val content = ContentFactory.getInstance().createContent(panel, "", false)
         toolWindow.contentManager.addContent(content)

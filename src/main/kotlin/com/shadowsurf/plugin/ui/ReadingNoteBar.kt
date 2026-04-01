@@ -3,11 +3,15 @@ package com.shadowsurf.plugin.ui
 import com.intellij.util.ui.JBUI
 import java.awt.BorderLayout
 import java.awt.FlowLayout
+import java.awt.Toolkit
+import java.awt.event.KeyEvent
 import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.JScrollPane
 import javax.swing.JTextArea
 import javax.swing.JTextField
+import javax.swing.KeyStroke
 
 class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
 
@@ -17,7 +21,11 @@ class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
         isEditable = false
         rows = 3
     }
-    private val noteField = JTextField()
+    private val noteField = JTextArea().apply {
+        lineWrap = true
+        wrapStyleWord = true
+        rows = 4
+    }
     private val tagsField = JTextField()
     private val saveButton = JButton("Save")
     private val saveAsButton = JButton("Save As...")
@@ -36,7 +44,7 @@ class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
         formPanel.add(previewArea, BorderLayout.CENTER)
 
         val fieldsPanel = JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(6)))
-        fieldsPanel.add(noteField, BorderLayout.CENTER)
+        fieldsPanel.add(JScrollPane(noteField), BorderLayout.CENTER)
         fieldsPanel.add(tagsField, BorderLayout.SOUTH)
 
         val actionPanel = JPanel(FlowLayout(FlowLayout.RIGHT, JBUI.scale(6), 0))
@@ -54,6 +62,20 @@ class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
             onCancel?.invoke()
             reset()
         }
+
+        val saveKeyStroke = KeyStroke.getKeyStroke(
+            KeyEvent.VK_ENTER,
+            Toolkit.getDefaultToolkit().menuShortcutKeyMaskEx,
+        )
+        noteField.inputMap.put(saveKeyStroke, "shadowSurf.saveNote")
+        noteField.actionMap.put(
+            "shadowSurf.saveNote",
+            object : javax.swing.AbstractAction() {
+                override fun actionPerformed(event: java.awt.event.ActionEvent?) {
+                    saveButton.doClick()
+                }
+            },
+        )
     }
 
     fun open(selectedText: String, pageTitle: String, pageUrl: String) {
@@ -107,4 +129,10 @@ class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
     fun triggerSaveAs() {
         saveAsButton.doClick()
     }
+
+    fun triggerKeyboardSave() {
+        noteField.actionMap.get("shadowSurf.saveNote")?.actionPerformed(null)
+    }
+
+    fun noteInputWraps(): Boolean = noteField.lineWrap && noteField.wrapStyleWord
 }

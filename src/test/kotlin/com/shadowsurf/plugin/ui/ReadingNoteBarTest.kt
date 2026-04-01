@@ -48,6 +48,35 @@ class ReadingNoteBarTest {
     }
 
     @Test
+    fun shouldUseMultilineWrappingNoteInput() {
+        val bar = ReadingNoteBar()
+
+        bar.setNoteText("Line 1\nLine 2")
+
+        assertTrue(bar.noteInputWraps())
+        assertEquals("Line 1\nLine 2", bar.noteText())
+    }
+
+    @Test
+    fun shouldSaveOnKeyboardShortcut() {
+        val bar = ReadingNoteBar()
+        var receivedNote = ""
+        var receivedTags = ""
+
+        bar.setNoteText("A long note")
+        bar.setTagsText("tag1")
+        bar.onSave { noteText, tagsText ->
+            receivedNote = noteText
+            receivedTags = tagsText
+        }
+
+        bar.triggerKeyboardSave()
+
+        assertEquals("A long note", receivedNote)
+        assertEquals("tag1", receivedTags)
+    }
+
+    @Test
     fun shouldRequestParentRelayoutWhenReset() {
         var revalidated = false
         val parent = object : JPanel() {
