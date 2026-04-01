@@ -72,6 +72,10 @@ class ReadingNoteBar : JPanel(BorderLayout(JBUI.scale(8), JBUI.scale(8))) {
         noteField.text = ""
         tagsField.text = ""
         isVisible = false
+        revalidate()
+        repaint()
+        parent?.revalidate()
+        parent?.repaint()
     }
 
     fun setNoteText(value: String) {

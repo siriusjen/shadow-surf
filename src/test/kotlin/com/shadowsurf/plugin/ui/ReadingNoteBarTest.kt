@@ -4,6 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
+import javax.swing.JPanel
 
 class ReadingNoteBarTest {
 
@@ -44,5 +45,29 @@ class ReadingNoteBarTest {
         bar.triggerSaveAs()
 
         assertTrue(called)
+    }
+
+    @Test
+    fun shouldRequestParentRelayoutWhenReset() {
+        var revalidated = false
+        val parent = object : JPanel() {
+            override fun revalidate() {
+                revalidated = true
+                super.revalidate()
+            }
+        }
+        val bar = ReadingNoteBar()
+        parent.add(bar)
+
+        bar.open(
+            selectedText = "Excerpt",
+            pageTitle = "Example",
+            pageUrl = "https://example.com",
+        )
+        revalidated = false
+
+        bar.reset()
+
+        assertTrue(revalidated)
     }
 }
